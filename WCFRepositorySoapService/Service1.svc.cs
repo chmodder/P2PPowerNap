@@ -173,9 +173,52 @@ namespace WCFRepositorySoapService
             return fileLocations;
         }
 
+        /// <summary>
+        /// Returns true if something was removed from the index
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <param name="host"></param>
+        /// <param name="port"></param>
+        /// <returns></returns>
         public bool Remove(string fileName, string host, int port)
         {
-            throw new NotImplementedException();
+            string cmdText = @"
+                                DELETE FROM [WCFRepositorySoapService].[Index]
+                                WHERE FileName LIKE @fileName 
+                                        AND Fk_Host LIKE @host 
+                                        AND Fk_Port = @port;";
+
+            int numberOfRowsAffected = 0;
+            bool deletedFromIndexTableSuccessfully = false;
+
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                conn.Open();
+
+                using (SqlCommand cmd = new SqlCommand(cmdText, conn))
+                {
+                    cmd.Parameters.AddWithValue("fileName", fileName);
+                    cmd.Parameters.AddWithValue("host", host);
+                    cmd.Parameters.AddWithValue("port", port);
+
+                    //Trying to Delete records where fileName exists in Index table
+                    try
+                    {
+                        numberOfRowsAffected = cmd.ExecuteNonQuery();
+                    }
+                    catch (Exception e)
+                    {
+
+                    }
+
+                    if (numberOfRowsAffected > 0)
+                    {
+                        deletedFromIndexTableSuccessfully = true;
+                    }
+                }
+            }
+
+            return deletedFromIndexTableSuccessfully;
         }
     }
 }
