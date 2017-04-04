@@ -62,6 +62,12 @@ namespace WCFRepositorySoapService
     [DataContract]
     public class Destination
     {
+        public Destination(string host, int port)
+        {
+            this.Host = host;
+            this.Port = port;
+        }
+
         [DataMember]
         public string Host { get; set; }
 

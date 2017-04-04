@@ -23,7 +23,7 @@ namespace WCFRepositorySoapService
         /// <returns>Number of entries (Int32) in Repository</returns>
         public int Count()
         {
-            string cmdText = @"SELECT COUNT(*) NumberOfEntries FROM [WCFRepositorySoapService].[Repository]";
+            string cmdText = @"SELECT COUNT(*) NumberOfEntries FROM [WCFRepositorySoapService].[Index]";
 
             int numberOfEntries = 0;
 
@@ -31,7 +31,7 @@ namespace WCFRepositorySoapService
             {
                 conn.Open();
 
-                using (SqlCommand cmd = new SqlCommand(cmdText,conn))
+                using (SqlCommand cmd = new SqlCommand(cmdText, conn))
                 {
                     SqlDataReader reader = cmd.ExecuteReader();
 
@@ -52,8 +52,7 @@ namespace WCFRepositorySoapService
         /// <returns></returns>
         public int CountFilenames()
         {
-            //TODO make commandtext
-            string cmdText = @"SELECT COUNT(DISTINCT(Fk_FileName)) NumberOfUniqueFileNames FROM [WCFRepositorySoapService].[Repository]";
+            string cmdText = @"SELECT COUNT(DISTINCT(FileName)) NumberOfUniqueFileNames FROM [WCFRepositorySoapService].[Index]";
 
             int NumberOfUniqueFileNames = 0;
 
@@ -74,14 +73,104 @@ namespace WCFRepositorySoapService
 
             return NumberOfUniqueFileNames;
         }
+
+        /// <summary>
+        /// Returns true if something was added to the index
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <param name="hostName"></param>
+        /// <param name="port"></param>
+        /// <returns></returns>
         public bool Add(string fileName, string hostName, int port)
         {
-            throw new NotImplementedException();
+            string cmdText = @"INSERT INTO [WCFRepositorySoapService].[Endpoint] VALUES (@hostName, @port);";
+            string cmdText2 = @"INSERT INTO [WCFRepositorySoapService].[Index] VALUES (@fileName, @hostName, @port);";
+            int numberOfRowsAffected = 0;
+            bool insertedIntoRepositorySuccessfully = false;
+
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                conn.Open();
+
+                using (SqlCommand cmd = new SqlCommand(cmdText, conn))
+                {
+                    cmd.Parameters.AddWithValue("fileName", fileName);
+                    cmd.Parameters.AddWithValue("hostName", hostName);
+                    cmd.Parameters.AddWithValue("port", port);
+
+                    //Trying to insert into Endpoint table
+                    try
+                    {
+                        //numberOfRowsAffected doesnt serve any purpose here except for storing the return value teporaryly until being set again when executing the next query below
+                        numberOfRowsAffected = cmd.ExecuteNonQuery();
+                    }
+                    catch (Exception e)
+                    {
+
+                    }
+
+                    //Changing commandtext for inserting data into Index table
+                    cmd.CommandText = cmdText2;
+
+                    //Trying to insert into Index table
+                    try
+                    {
+                        numberOfRowsAffected = cmd.ExecuteNonQuery();
+                    }
+                    catch (Exception e)
+                    {
+
+                    }
+
+                    if (numberOfRowsAffected > 0)
+                    {
+                        insertedIntoRepositorySuccessfully = true;
+                    }
+                }
+            }
+            return insertedIntoRepositorySuccessfully;
         }
 
+        /// <summary>
+        /// Gets a list of destinations where the file is located
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
         public List<Destination> Get(string fileName)
         {
-            throw new NotImplementedException();
+            string cmdText = @"
+                               SELECT Fk_Host, Fk_Port FROM [WCFRepositorySoapService].[Index]
+                               WHERE FileName LIKE @fileName";
+
+            List<Destination> fileLocations = new List<Destination>();
+
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                conn.Open();
+
+                using (SqlCommand cmd = new SqlCommand(cmdText, conn))
+                {
+                    cmd.Parameters.AddWithValue("fileName", fileName);
+
+                    //Trying to get the data (Endpoint locations where filename is located) from Index table
+                    try
+                    {
+                        SqlDataReader reader = cmd.ExecuteReader();
+
+                        foreach (IDataRecord record in reader)
+                        {
+                            Destination d = new Destination(record.GetString(0),record.GetInt32(1));
+                            fileLocations.Add(d);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+
+                    }
+                }
+            }
+
+            return fileLocations;
         }
 
         public bool Remove(string fileName, string host, int port)
