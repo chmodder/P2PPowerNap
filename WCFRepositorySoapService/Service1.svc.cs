@@ -45,7 +45,6 @@ namespace WCFRepositorySoapService
             return numberOfEntries;
         }
 
-
         /// <summary>
         /// Counts all different filenames in the index
         /// </summary>
