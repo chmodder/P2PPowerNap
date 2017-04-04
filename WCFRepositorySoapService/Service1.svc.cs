@@ -14,7 +14,6 @@ namespace WCFRepositorySoapService
     // NOTE: In order to launch WCF Test Client for testing this service, please select Service1.svc or Service1.svc.cs at the Solution Explorer and start debugging.
     public class Service1 : IService1
     {
-        //TODO Set connectionString
         public const string ConnString = "Server=tcp:dalvang.database.windows.net,1433;Initial Catalog=DalvangDb;Persist Security Info=False;User ID=Dalvang;Password=)ktk)Pa79NXDlMapMK;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
 
 
@@ -24,7 +23,6 @@ namespace WCFRepositorySoapService
         /// <returns>Number of entries (Int32) in Repository</returns>
         public int Count()
         {
-            //TODO make commandtext
             string cmdText = @"SELECT COUNT(*) NumberOfEntries FROM [WCFRepositorySoapService].[Repository]";
 
             int numberOfEntries = 0;
@@ -47,9 +45,34 @@ namespace WCFRepositorySoapService
             return numberOfEntries;
         }
 
+
+        /// <summary>
+        /// Counts all different filenames in the index
+        /// </summary>
+        /// <returns></returns>
         public int CountFilenames()
         {
-            throw new NotImplementedException();
+            //TODO make commandtext
+            string cmdText = @"SELECT COUNT(DISTINCT(Fk_FileName)) NumberOfUniqueFileNames FROM [WCFRepositorySoapService].[Repository]";
+
+            int NumberOfUniqueFileNames = 0;
+
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                conn.Open();
+
+                using (SqlCommand cmd = new SqlCommand(cmdText, conn))
+                {
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+                    foreach (IDataRecord row in reader)
+                    {
+                        NumberOfUniqueFileNames = row.GetInt32(0);
+                    }
+                }
+            }
+
+            return NumberOfUniqueFileNames;
         }
         public bool Add(string fileName, string hostName, int port)
         {
