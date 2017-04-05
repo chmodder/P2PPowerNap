@@ -7,6 +7,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WCFRepositorySoapService", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WCFRepositorySoapServiceTests", "WCFRepositorySoapServiceTests\WCFRepositorySoapServiceTests.csproj", "{D7B7E96D-0913-410C-9FEA-77BFA8504E70}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPFClient", "WPFClient\WPFClient.csproj", "{816D5356-B3E5-4CB9-8711-101171C516C0}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E3B5B31B-ADFA-43DC-8562-B7CB0C9B49DA} = {E3B5B31B-ADFA-43DC-8562-B7CB0C9B49DA}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +26,10 @@ Global
 		{D7B7E96D-0913-410C-9FEA-77BFA8504E70}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D7B7E96D-0913-410C-9FEA-77BFA8504E70}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D7B7E96D-0913-410C-9FEA-77BFA8504E70}.Release|Any CPU.Build.0 = Release|Any CPU
+		{816D5356-B3E5-4CB9-8711-101171C516C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{816D5356-B3E5-4CB9-8711-101171C516C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{816D5356-B3E5-4CB9-8711-101171C516C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{816D5356-B3E5-4CB9-8711-101171C516C0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

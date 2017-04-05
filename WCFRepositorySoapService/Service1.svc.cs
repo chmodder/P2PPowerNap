@@ -158,7 +158,7 @@ namespace WCFRepositorySoapService
 
                         foreach (IDataRecord record in reader)
                         {
-                            Destination d = new Destination(record.GetString(0),record.GetInt32(1));
+                            Destination d = new Destination(record.GetString(0), record.GetInt32(1));
                             fileLocations.Add(d);
                         }
                     }
@@ -218,6 +218,107 @@ namespace WCFRepositorySoapService
             }
 
             return deletedFromIndexTableSuccessfully;
+        }
+
+        /// <summary>
+        /// Adds a List of files to the database index
+        /// </summary>
+        /// <param name="files"></param>
+        /// <returns>True if all was successfull</returns>
+        public int AddAll(List<string> files, string host, int port)
+        {
+            //TODO update commandtext to insert multiple files
+            string cmdText = @"INSERT INTO [WCFRepositorySoapService].[Endpoint] VALUES (@hostName, @port);";
+            string cmdText2 = @"INSERT INTO [WCFRepositorySoapService].[Index] VALUES (@fileName, @hostName, @port);";
+            int numberOfRowsAffected = 0;
+
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                conn.Open();
+
+                using (SqlCommand cmd = new SqlCommand(cmdText, conn))
+                {
+                    cmd.Parameters.AddWithValue("hostName", host);
+                    cmd.Parameters.AddWithValue("port", port);
+
+                    int counter = 0;
+
+                    //Adding an Insert command for each fileName to the commandtext
+                    foreach (string fileName in files)
+                    {
+                        cmd.Parameters.AddWithValue("fileName"+ counter, fileName);
+                        cmdText2 += @"INSERT INTO [WCFRepositorySoapService].[Index] VALUES (@fileName" + counter + ", @hostName, @port);";
+                        counter++;
+                    }
+                    
+                    //Trying to insert into Endpoint table
+                    try
+                    {
+                        //numberOfRowsAffected doesnt serve any purpose here except for storing the return value teporaryly until being set again when executing the next query below
+                        numberOfRowsAffected = cmd.ExecuteNonQuery();
+                    }
+                    catch (Exception e)
+                    {
+
+                    }
+
+                    //Changing commandtext for inserting data into Index table
+                    cmd.CommandText = cmdText2;
+
+                    //Trying to insert into Index table
+                    try
+                    {
+                        numberOfRowsAffected = cmd.ExecuteNonQuery();
+                    }
+                    catch (Exception e)
+                    {
+
+                    }
+
+                }
+            }
+            return numberOfRowsAffected;
+        }
+
+        /// <summary>
+        /// Removes file location from the database index
+        /// </summary>
+        /// <param name="host"></param>
+        /// <param name="port"></param>
+        /// <returns></returns>
+        public int RemoveAll(string host, int port)
+        {
+            //TODO update commandtext to remove multiple files
+            string cmdText = @"
+                                REMOVE FROM [WCFRepositorySoapService].[Index]
+                                WHERE Fk_Host LIKE @host
+                                AND Fk_Port = @port;";
+
+            int numberOfRowsAffected = 0;
+
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                conn.Open();
+
+                using (SqlCommand cmd = new SqlCommand(cmdText, conn))
+                {
+                    cmd.Parameters.AddWithValue("host", host);
+                    cmd.Parameters.AddWithValue("port", port);
+
+                    //Trying to insert into Endpoint table
+                    try
+                    {
+                        //numberOfRowsAffected doesnt serve any purpose here except for storing the return value teporaryly until being set again when executing the next query below
+                        numberOfRowsAffected = cmd.ExecuteNonQuery();
+                    }
+                    catch (Exception e)
+                    {
+
+                    }
+
+                }
+            }
+            return numberOfRowsAffected;
         }
     }
 }

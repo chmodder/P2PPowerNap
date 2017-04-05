@@ -55,8 +55,19 @@ namespace WCFRepositorySoapService
         [OperationContract]
         bool Remove(string fileName, string host, int port);
 
+
         //TODO add extras: "int HowMany AddAll(List<filename>, host, port)" and "int HowMany RemoveAll(host, port)"
 
+        /// <summary>
+        /// Adds a List of files to the database index
+        /// </summary>
+        /// <param name="files"></param>
+        /// <returns>True if all was successfull</returns>
+        [OperationContract]
+        int AddAll(List<string> files, string host, int port);
+
+        [OperationContract]
+        int RemoveAll(string host, int port);
     }
 
     [DataContract]
