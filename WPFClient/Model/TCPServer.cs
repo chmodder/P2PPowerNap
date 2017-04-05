@@ -27,19 +27,14 @@ namespace WPFClient.Model
                 .AddressList
                 .First(ip => ip.AddressFamily == AddressFamily.InterNetwork);
             // IPv4 http://stackoverflow.com/questions/2048132/net-ipaddress-ipv4
-
-
-            //ServerPort = 14593;
-            ServerPort = serverPort;
-
-            //SetUpTraceListener();
             
+            ServerPort = serverPort;
             SharedFolder = localSharedFolder;
 
-            ServerPart();
+            SetUpServer();
         }
 
-        private void ServerPart()
+        private void SetUpServer()
         {
             TcpListener tcpListener = new TcpListener(ServerIpAddress, ServerPort);
             tcpListener.Start();
