@@ -43,7 +43,6 @@ namespace WPFClient.ViewModels
 
             Server = new TCPServer(LocalFileDirectory, 14593);
 
-            //TODO FIX relaycommand
             GetFileCmd = new RelayCommand(Handler.GetFile);
         }
 

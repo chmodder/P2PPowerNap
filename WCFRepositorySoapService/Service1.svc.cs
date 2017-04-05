@@ -213,8 +213,7 @@ namespace WCFRepositorySoapService
         /// <returns>True if all was successfull</returns>
         public int AddAll(List<string> files, string host, int port)
         {
-            //TODO update commandtext to insert multiple files
-            //string cmdText = @"INSERT INTO [WCFRepositorySoapService].[Index] VALUES (@fileName, @hostName, @port);";
+            //TODO low priority: Optimize to make a batch query
 
             string cmdText = @"";
             int numberOfRowsAffected = 0;
@@ -284,7 +283,7 @@ namespace WCFRepositorySoapService
         /// <returns></returns>
         public int RemoveAll(string host, int port)
         {
-            //TODO update commandtext to remove multiple files
+            //TODO test method
             string cmdText = @"
                                 REMOVE FROM [WCFRepositorySoapService].[Index]
                                 WHERE Host LIKE @host

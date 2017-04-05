@@ -56,7 +56,7 @@ namespace WCFRepositorySoapService
         bool Remove(string fileName, string host, int port);
 
 
-        //TODO add extras: "int HowMany AddAll(List<filename>, host, port)" and "int HowMany RemoveAll(host, port)"
+        //TODO test extras: "int HowMany RemoveAll(host, port)"
 
         /// <summary>
         /// Adds a List of files to the database index

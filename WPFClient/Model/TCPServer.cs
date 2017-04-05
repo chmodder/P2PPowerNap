@@ -39,14 +39,6 @@ namespace WPFClient.Model
             ServerPart();
         }
 
-        //TODO Implement TraceListener
-        //private void SetUpTraceListener()
-        //{
-        //    Trace.AutoFlush = true;
-        //    TraceListener textBoxTraceListener = new TextBoxTraceListener(Dispatcher, StatusOutput);
-        //    Trace.Listeners.Add(textBoxTraceListener);
-        //}
-
         private void ServerPart()
         {
             TcpListener tcpListener = new TcpListener(ServerIpAddress, ServerPort);
@@ -68,10 +60,9 @@ namespace WPFClient.Model
             Trace.WriteLine("Trying to registrar:\n" + string.Join("\n", files));
             using (WCFRepositorySoapServiceReference.Service1Client client = new WCFRepositorySoapServiceReference.Service1Client("BasicHttpBinding_IService1"))
             {
-                // Todo ipAddress.ToString() working??
                 // Todo alternative: Use localHostName
-                string serverIp = ServerIpAddress.ToString();
-                int howMany = client.AddAll(files,serverIp, serverPort);
+                //string serverIp = ServerIpAddress.ToString();
+                int howMany = client.AddAll(files, ServerIpAddress.ToString(), serverPort);
                 Trace.WriteLine("Files registred: " + howMany);
             }
         }

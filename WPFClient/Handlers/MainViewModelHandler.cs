@@ -21,8 +21,6 @@ namespace WPFClient.Handlers
 
         public void GetFile()
         {
-            //TODO implement GetFile
-
             ViewModel.Server.GetFile(ViewModel.LocalFileDirectory,ViewModel.FileName);
         }
     }
