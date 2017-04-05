@@ -82,8 +82,7 @@ namespace WCFRepositorySoapService
         /// <returns></returns>
         public bool Add(string fileName, string hostName, int port)
         {
-            string cmdText = @"INSERT INTO [WCFRepositorySoapService].[Endpoint] VALUES (@hostName, @port);";
-            string cmdText2 = @"INSERT INTO [WCFRepositorySoapService].[Index] VALUES (@fileName, @hostName, @port);";
+            string cmdText = @"INSERT INTO [WCFRepositorySoapService].[Index] VALUES (@fileName, @hostName, @port);";
             int numberOfRowsAffected = 0;
             bool insertedIntoRepositorySuccessfully = false;
 
@@ -101,19 +100,6 @@ namespace WCFRepositorySoapService
                     try
                     {
                         //numberOfRowsAffected doesnt serve any purpose here except for storing the return value teporaryly until being set again when executing the next query below
-                        numberOfRowsAffected = cmd.ExecuteNonQuery();
-                    }
-                    catch (Exception e)
-                    {
-
-                    }
-
-                    //Changing commandtext for inserting data into Index table
-                    cmd.CommandText = cmdText2;
-
-                    //Trying to insert into Index table
-                    try
-                    {
                         numberOfRowsAffected = cmd.ExecuteNonQuery();
                     }
                     catch (Exception e)
@@ -228,8 +214,9 @@ namespace WCFRepositorySoapService
         public int AddAll(List<string> files, string host, int port)
         {
             //TODO update commandtext to insert multiple files
-            string cmdText = @"INSERT INTO [WCFRepositorySoapService].[Endpoint] VALUES (@hostName, @port);";
-            string cmdText2 = @"INSERT INTO [WCFRepositorySoapService].[Index] VALUES (@fileName, @hostName, @port);";
+            //string cmdText = @"INSERT INTO [WCFRepositorySoapService].[Index] VALUES (@fileName, @hostName, @port);";
+
+            string cmdText = @"";
             int numberOfRowsAffected = 0;
 
             using (SqlConnection conn = new SqlConnection(ConnString))
@@ -244,37 +231,23 @@ namespace WCFRepositorySoapService
                     int counter = 0;
 
                     //Adding an Insert command for each fileName to the commandtext
-                    foreach (string fileName in files)
+                    foreach (var fileName in files)
                     {
-                        cmd.Parameters.AddWithValue("fileName"+ counter, fileName);
-                        cmdText2 += @"INSERT INTO [WCFRepositorySoapService].[Index] VALUES (@fileName" + counter + ", @hostName, @port);";
+                        cmdText += @"INSERT INTO [WCFRepositorySoapService].[Index] VALUES (@fileName" + counter + ",@hostName, @port);";
+                        cmd.Parameters.AddWithValue("fileName" + counter, fileName);
                         counter++;
                     }
-                    
-                    //Trying to insert into Endpoint table
+
+                    //Trying to insert into Index table and get the number of rows that were inserted
                     try
                     {
-                        //numberOfRowsAffected doesnt serve any purpose here except for storing the return value teporaryly until being set again when executing the next query below
+                        cmd.CommandText = cmdText;
                         numberOfRowsAffected = cmd.ExecuteNonQuery();
                     }
                     catch (Exception e)
                     {
 
                     }
-
-                    //Changing commandtext for inserting data into Index table
-                    cmd.CommandText = cmdText2;
-
-                    //Trying to insert into Index table
-                    try
-                    {
-                        numberOfRowsAffected = cmd.ExecuteNonQuery();
-                    }
-                    catch (Exception e)
-                    {
-
-                    }
-
                 }
             }
             return numberOfRowsAffected;
@@ -291,8 +264,8 @@ namespace WCFRepositorySoapService
             //TODO update commandtext to remove multiple files
             string cmdText = @"
                                 REMOVE FROM [WCFRepositorySoapService].[Index]
-                                WHERE Fk_Host LIKE @host
-                                AND Fk_Port = @port;";
+                                WHERE Host LIKE @host
+                                AND Port = @port;";
 
             int numberOfRowsAffected = 0;
 
