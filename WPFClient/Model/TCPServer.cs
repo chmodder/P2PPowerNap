@@ -59,12 +59,13 @@ namespace WPFClient.Model
         private void RegisterFiles(string sharedFolder, IPAddress serverIpAddress, int serverPort)
         {
             string[] files = Directory.GetFiles(sharedFolder);
-            Trace.WriteLine(string.Join("\n", files));
+            Trace.WriteLine($"Looking for files to add in {sharedFolder}");
             for (int i = 0; i < files.Length; i++)
             {
                 files[i] = GetFileName(files[i]);
             }
-            Trace.WriteLine(string.Join("\n", files));
+            Trace.WriteLine($"Files found in shared folder: {files.ToList().Count.ToString()}");
+            Trace.WriteLine("Trying to registrar:\n" + string.Join("\n", files));
             using (WCFRepositorySoapServiceReference.Service1Client client = new WCFRepositorySoapServiceReference.Service1Client("BasicHttpBinding_IService1"))
             {
                 // Todo ipAddress.ToString() working??

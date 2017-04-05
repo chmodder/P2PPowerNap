@@ -233,21 +233,44 @@ namespace WCFRepositorySoapService
                     //Adding an Insert command for each fileName to the commandtext
                     foreach (var fileName in files)
                     {
-                        cmdText += @"INSERT INTO [WCFRepositorySoapService].[Index] VALUES (@fileName" + counter + ",@hostName, @port);";
+                        cmdText = @"INSERT INTO [WCFRepositorySoapService].[Index] VALUES (@fileName" + counter + ",@hostName, @port);";
                         cmd.Parameters.AddWithValue("fileName" + counter, fileName);
+
+                        //Trying to insert into Index table and get the number of rows that were inserted
+                        try
+                        {
+                            cmd.CommandText = cmdText;
+                            numberOfRowsAffected += cmd.ExecuteNonQuery();
+                        }
+                        catch (Exception e)
+                        {
+
+                        }
+
                         counter++;
                     }
 
-                    //Trying to insert into Index table and get the number of rows that were inserted
-                    try
-                    {
-                        cmd.CommandText = cmdText;
-                        numberOfRowsAffected = cmd.ExecuteNonQuery();
-                    }
-                    catch (Exception e)
-                    {
 
-                    }
+
+                    ////Adding an Insert command for each fileName to the commandtext
+                    //foreach (var fileName in files)
+                    //{
+                    //    cmdText += @"INSERT INTO [WCFRepositorySoapService].[Index] VALUES (@fileName" + counter + ",@hostName, @port);";
+                    //    cmd.Parameters.AddWithValue("fileName" + counter, fileName);
+                    //    counter++;
+                    //}
+
+                    ////Trying to insert into Index table and get the number of rows that were inserted
+                    //try
+                    //{
+                    //    cmd.CommandText = cmdText;
+                    //    numberOfRowsAffected = cmd.ExecuteNonQuery();
+                    //}
+                    //catch (Exception e)
+                    //{
+
+                    //}
+
                 }
             }
             return numberOfRowsAffected;
