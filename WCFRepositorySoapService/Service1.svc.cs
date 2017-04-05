@@ -124,7 +124,7 @@ namespace WCFRepositorySoapService
         public List<Destination> Get(string fileName)
         {
             string cmdText = @"
-                               SELECT Fk_Host, Fk_Port FROM [WCFRepositorySoapService].[Index]
+                               SELECT Host, Port FROM [WCFRepositorySoapService].[Index]
                                WHERE FileName LIKE @fileName";
 
             List<Destination> fileLocations = new List<Destination>();

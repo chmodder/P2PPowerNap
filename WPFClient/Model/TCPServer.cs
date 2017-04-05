@@ -57,7 +57,7 @@ namespace WPFClient.Model
                 files[i] = GetFileName(files[i]);
             }
             Trace.WriteLine($"Files found in shared folder: {files.ToList().Count.ToString()}");
-            Trace.WriteLine("Trying to registrar:\n" + string.Join("\n", files));
+            Trace.WriteLine("Trying to registrar:\n* " + string.Join("\n* ", files));
             using (WCFRepositorySoapServiceReference.Service1Client client = new WCFRepositorySoapServiceReference.Service1Client("BasicHttpBinding_IService1"))
             {
                 // Todo alternative: Use localHostName
@@ -73,9 +73,9 @@ namespace WPFClient.Model
             return path.Substring(index + 1);
         }
 
-        public void GetFile(string destinationFolder, string fileName)
+        public void GetFile(string downloadFolder, string fileName)
         {
-            Trace.WriteLine(fileName);
+            Trace.WriteLine($"Trying to find locations for '{fileName}'");
             using (WCFRepositorySoapServiceReference.Service1Client client = new WCFRepositorySoapServiceReference.Service1Client("BasicHttpBinding_IService1"))
             {
                 try
@@ -104,7 +104,7 @@ namespace WPFClient.Model
                             writer.WriteLine(fileName);
                             writer.Flush();
                             //writer.Close();
-                            FileStream fileStream = new FileStream(destinationFolder + "copy" + fileName, FileMode.Create);
+                            FileStream fileStream = new FileStream(downloadFolder + "copy" + fileName, FileMode.Create);
                             stream.CopyTo(fileStream);
                         }
                     });
