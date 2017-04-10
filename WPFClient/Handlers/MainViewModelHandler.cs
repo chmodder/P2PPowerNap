@@ -23,5 +23,10 @@ namespace WPFClient.Handlers
         {
             ViewModel.Server.GetFile(ViewModel.LocalFileDirectory,ViewModel.FileName);
         }
+
+        public void RemoveAll()
+        {
+            ViewModel.Server.RemoveAllFromIndex();
+        }
     }
 }

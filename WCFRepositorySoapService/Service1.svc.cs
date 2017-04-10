@@ -285,7 +285,7 @@ namespace WCFRepositorySoapService
         {
             //TODO test method
             string cmdText = @"
-                                REMOVE FROM [WCFRepositorySoapService].[Index]
+                                DELETE FROM [WCFRepositorySoapService].[Index]
                                 WHERE Host LIKE @host
                                 AND Port = @port;";
 

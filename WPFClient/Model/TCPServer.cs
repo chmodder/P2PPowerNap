@@ -147,7 +147,7 @@ namespace WPFClient.Model
             }
         }
 
-        private void RemoveAllFromIndex()
+        public void RemoveAllFromIndex()
         {
             using (WCFRepositorySoapServiceReference.Service1Client client = new Service1Client("BasicHttpBinding_IService1"))
             {

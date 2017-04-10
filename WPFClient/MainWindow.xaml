@@ -6,8 +6,9 @@
         xmlns:local="clr-namespace:WPFClient"
         xmlns:ViewModels="clr-namespace:WPFClient.ViewModels" x:Class="WPFClient.MainWindow"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
-    <Grid>
+        Title="MainWindow" Height="350" Width="525"
+        Closing="MainWindow_OnClosing">
+    <Grid Name="TheGrid">
         <Grid.DataContext>
             <ViewModels:MainWindowViewModel/>
         </Grid.DataContext>
