@@ -37,6 +37,7 @@ namespace WPFClient.Model
         private void SetUpServer()
         {
             TcpListener tcpListener = new TcpListener(ServerIpAddress, ServerPort);
+            //Task.Factory.StartNew(() => tcpListener.Start());
             tcpListener.Start();
             Trace.WriteLine("TcpListener: " + tcpListener.LocalEndpoint);
             RegisterFiles(SharedFolder, ServerIpAddress, ServerPort);
@@ -53,7 +54,8 @@ namespace WPFClient.Model
             }
             Trace.WriteLine($"Files found in shared folder: {files.ToList().Count.ToString()}");
             Trace.WriteLine("Trying to registrar:\n* " + string.Join("\n* ", files));
-            using (WCFRepositorySoapServiceReference.Service1Client client = new WCFRepositorySoapServiceReference.Service1Client("BasicHttpBinding_IService1"))
+            //using (WCFRepositorySoapServiceReference.Service1Client client = new WCFRepositorySoapServiceReference.Service1Client("BasicHttpBinding_IService1"))
+            using (WCFRepositorySoapServiceReference.Service1Client client = new WCFRepositorySoapServiceReference.Service1Client())
             {
                 // Todo alternative: Use localHostName
                 //string serverIp = ServerIpAddress.ToString();
@@ -71,7 +73,8 @@ namespace WPFClient.Model
         public void GetFile(string downloadFolder, string fileName)
         {
             Trace.WriteLine($"Trying to find locations for '{fileName}'");
-            using (WCFRepositorySoapServiceReference.Service1Client client = new WCFRepositorySoapServiceReference.Service1Client("BasicHttpBinding_IService1"))
+            //using (WCFRepositorySoapServiceReference.Service1Client client = new WCFRepositorySoapServiceReference.Service1Client("BasicHttpBinding_IService1"))
+            using (WCFRepositorySoapServiceReference.Service1Client client = new WCFRepositorySoapServiceReference.Service1Client())
             {
                 try
                 {
@@ -149,7 +152,8 @@ namespace WPFClient.Model
 
         public void RemoveAllFromIndex()
         {
-            using (WCFRepositorySoapServiceReference.Service1Client client = new Service1Client("BasicHttpBinding_IService1"))
+            //using (WCFRepositorySoapServiceReference.Service1Client client = new WCFRepositorySoapServiceReference.Service1Client("BasicHttpBinding_IService1"))
+            using (WCFRepositorySoapServiceReference.Service1Client client = new WCFRepositorySoapServiceReference.Service1Client())
             {
                 int howMany = client.RemoveAll(ServerIpAddress.ToString(), ServerPort);
                 Trace.WriteLine("Files registred: " + howMany);

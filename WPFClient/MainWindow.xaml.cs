@@ -29,12 +29,5 @@ namespace WPFClient
             InitializeComponent();
         }
 
-        private void MainWindow_OnClosing(object sender, CancelEventArgs e)
-        {
-            //TODO refactor using MVVM design pattern
-            var viewModel = (MainWindowViewModel)TheGrid.DataContext;
-
-            viewModel.Handler.RemoveAll();
-        }
     }
 }

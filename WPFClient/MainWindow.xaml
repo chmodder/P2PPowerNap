@@ -4,28 +4,42 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPFClient"
-        xmlns:ViewModels="clr-namespace:WPFClient.ViewModels" x:Class="WPFClient.MainWindow"
+        xmlns:ViewModels="clr-namespace:WPFClient.ViewModels" xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" xmlns:Custom="http://www.galasoft.ch/mvvmlight" x:Class="WPFClient.MainWindow"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525"
-        Closing="MainWindow_OnClosing">
-    <Grid Name="TheGrid">
-        <Grid.DataContext>
-            <ViewModels:MainWindowViewModel/>
-        </Grid.DataContext>
+        >
+
+    <Window.Resources>
+        <ViewModels:MainWindowViewModel x:Key="viewModel"/>
+    </Window.Resources>
+
+    <!--Interactions should be inside Window tag root. Will not work if inside Grid tag-->
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Closed">
+            <i:InvokeCommandAction Command="{Binding RemoveAllCmd, Mode=OneWay, Source={StaticResource viewModel}}" CommandParameter="{Binding Mode=OneWay}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <!--Interactions END-->
+
+
+    <Grid x:Name="TheGrid" DataContext="{StaticResource viewModel}" >
+
         <StackPanel Orientation="Horizontal"  HorizontalAlignment="Left" VerticalAlignment="Top" >
             <TextBlock x:Name="TblFileDirectory" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Shared folder " VerticalAlignment="Center"/>
-            <TextBox x:Name="TbxFileDirectory" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding LocalFileDirectory, Mode=TwoWay}" BorderBrush="Black" VerticalAlignment="Top" Width="120"/>
+            <TextBox x:Name="TbxFileDirectory" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding LocalFileDirectory, Mode=TwoWay, Source={StaticResource viewModel}}" BorderBrush="Black" VerticalAlignment="Top" Width="120"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal"  HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,28,0,0">
             <TextBlock x:Name="TblFileName" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Filename " VerticalAlignment="Center"/>
-            <TextBox x:Name="TbxFileName" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" BorderBrush="Black" Text="{Binding FileName, Mode=TwoWay}" VerticalAlignment="Top" Width="120"/>
-            <Button Content="Get it!" Command="{Binding GetFileCmd, Mode=OneWay}" />
+            <TextBox x:Name="TbxFileName" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" BorderBrush="Black" Text="{Binding FileName, Mode=TwoWay, Source={StaticResource viewModel}}" VerticalAlignment="Top" Width="120"/>
+            <Button Content="Get it!" Command="{Binding GetFileCmd, Mode=OneWay, Source={StaticResource viewModel}}" />
         </StackPanel>
         <StackPanel Margin="0,56,0,10">
             <Border BorderBrush="Black" BorderThickness="0,1" >
                 <TextBlock x:Name="TblStatusHeader" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Status"/>
             </Border>
-            <TextBox Name="StatusOutput" Text="{Binding Listener.Trace, Mode=OneWay}" Height="236" VerticalScrollBarVisibility="Auto"/>
+            <TextBox x:Name="StatusOutput" Text="{Binding Listener.Trace, Mode=OneWay, Source={StaticResource viewModel}}" Height="236" VerticalScrollBarVisibility="Auto"/>
         </StackPanel>
+        
     </Grid>
+    
 </Window>

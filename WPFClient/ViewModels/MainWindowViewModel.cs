@@ -26,24 +26,31 @@ namespace WPFClient.ViewModels
 
         public TCPServer Server { get; set; }
 
-        public MyTraceListener Listener { get; set; }   
+        public MyTraceListener Listener { get; set; }
 
         public ICommand GetFileCmd { get; set; }
-        
+
+        public ICommand RemoveAllCmd { get; set; }
+
+
         public MainWindowViewModel()
         {
             LocalFileDirectory = "C:/temp/";
             Handler = new MainViewModelHandler(this);
 
+            #region Trace Listener setup
             /*------Experimentation: substitute for TextBoxTraceListener--------*/
             Trace.AutoFlush = true;
             Listener = new MyTraceListener();
             Trace.Listeners.Add(Listener);
             /*------Experimentation: End--------*/
+            #endregion
 
             Server = new TCPServer(LocalFileDirectory, 14593);
 
             GetFileCmd = new RelayCommand(Handler.GetFile);
+            RemoveAllCmd = new RelayCommand(Handler.RemoveAll);
+
         }
 
     }
