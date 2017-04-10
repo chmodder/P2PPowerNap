@@ -69,6 +69,11 @@
     <Compile Include="Helpers\Notifications.cs" />
     <Compile Include="Helpers\RelayCommand.cs" />
     <Compile Include="Model\TCPServer.cs" />
+    <Compile Include="Service References\WCFRepositorySoapServiceReferenceAzure\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="Service References\WCFRepositorySoapServiceReference\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -112,6 +117,22 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <None Include="Service References\WCFRepositorySoapServiceReferenceAzure\Service1.wsdl" />
+    <None Include="Service References\WCFRepositorySoapServiceReferenceAzure\Service1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\WCFRepositorySoapServiceReferenceAzure\Service11.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\WCFRepositorySoapServiceReferenceAzure\Service12.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\WCFRepositorySoapServiceReferenceAzure\Service13.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\WCFRepositorySoapServiceReferenceAzure\WPFClient.WCFRepositorySoapServiceReferenceAzure.Destination.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\WCFRepositorySoapServiceReference\Service1.wsdl" />
     <None Include="Service References\WCFRepositorySoapServiceReference\Service1.xsd">
       <SubType>Designer</SubType>
@@ -136,6 +157,7 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
+    <WCFMetadataStorage Include="Service References\WCFRepositorySoapServiceReferenceAzure\" />
     <WCFMetadataStorage Include="Service References\WCFRepositorySoapServiceReference\" />
   </ItemGroup>
   <ItemGroup>
@@ -146,6 +168,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Service References\WCFRepositorySoapServiceReference\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\WCFRepositorySoapServiceReferenceAzure\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\WCFRepositorySoapServiceReferenceAzure\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\WCFRepositorySoapServiceReferenceAzure\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>

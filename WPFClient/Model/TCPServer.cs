@@ -8,6 +8,8 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using WPFClient.WCFRepositorySoapServiceReference;
+using WPFClient.WCFRepositorySoapServiceReferenceAzure;
+
 
 namespace WPFClient.Model
 {
@@ -54,8 +56,8 @@ namespace WPFClient.Model
             }
             Trace.WriteLine($"Files found in shared folder: {files.ToList().Count.ToString()}");
             Trace.WriteLine("Trying to registrar:\n* " + string.Join("\n* ", files));
-            //using (WCFRepositorySoapServiceReference.Service1Client client = new WCFRepositorySoapServiceReference.Service1Client("BasicHttpBinding_IService1"))
-            using (WCFRepositorySoapServiceReference.Service1Client client = new WCFRepositorySoapServiceReference.Service1Client())
+            using (WCFRepositorySoapServiceReferenceAzure.Service1Client client = new WCFRepositorySoapServiceReferenceAzure.Service1Client("BasicHttpBinding_IService11"))
+            //using (WCFRepositorySoapServiceReference.Service1Client client = new WCFRepositorySoapServiceReference.Service1Client())
             {
                 // Todo alternative: Use localHostName
                 //string serverIp = ServerIpAddress.ToString();
@@ -73,25 +75,25 @@ namespace WPFClient.Model
         public void GetFile(string downloadFolder, string fileName)
         {
             Trace.WriteLine($"Trying to find locations for '{fileName}'");
-            //using (WCFRepositorySoapServiceReference.Service1Client client = new WCFRepositorySoapServiceReference.Service1Client("BasicHttpBinding_IService1"))
-            using (WCFRepositorySoapServiceReference.Service1Client client = new WCFRepositorySoapServiceReference.Service1Client())
+            using (WCFRepositorySoapServiceReferenceAzure.Service1Client client = new WCFRepositorySoapServiceReferenceAzure.Service1Client("BasicHttpBinding_IService11"))
+            //using (WCFRepositorySoapServiceReference.Service1Client client = new WCFRepositorySoapServiceReference.Service1Client())
             {
                 try
                 {
                     Task.Run(() => // to make the GUi more responsive
                     {
-                        Destination[] destinations = client.Get(fileName);
+                        WCFRepositorySoapServiceReferenceAzure.Destination[] destinations = client.Get(fileName);
                         Trace.WriteLine("We have some locations " + destinations.Length);
                         if (destinations.Length == 0)
                         {
                             Trace.WriteLine("No locations");
                             return;
                         }
-                        foreach (Destination destination in destinations)
+                        foreach (WCFRepositorySoapServiceReferenceAzure.Destination destination in destinations)
                         {
                             Trace.WriteLine(destination.Host + " " + destination.Port);
                         }
-                        Destination location = destinations[0];
+                        WCFRepositorySoapServiceReferenceAzure.Destination location = destinations[0];
                         Trace.WriteLine("Chosen location " + location.Host + " " + location.Port);
                         //string substring = location.Host.Substring(0, location.Host.Length - 2);
                         //Trace.WriteLine(substring);
@@ -152,8 +154,8 @@ namespace WPFClient.Model
 
         public void RemoveAllFromIndex()
         {
-            //using (WCFRepositorySoapServiceReference.Service1Client client = new WCFRepositorySoapServiceReference.Service1Client("BasicHttpBinding_IService1"))
-            using (WCFRepositorySoapServiceReference.Service1Client client = new WCFRepositorySoapServiceReference.Service1Client())
+            using (WCFRepositorySoapServiceReferenceAzure.Service1Client client = new WCFRepositorySoapServiceReferenceAzure.Service1Client("BasicHttpBinding_IService11"))
+            //using (WCFRepositorySoapServiceReference.Service1Client client = new WCFRepositorySoapServiceReference.Service1Client())
             {
                 int howMany = client.RemoveAll(ServerIpAddress.ToString(), ServerPort);
                 Trace.WriteLine("Files registred: " + howMany);
